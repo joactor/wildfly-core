@@ -463,12 +463,12 @@ public final class BootableJar implements ShutdownHandler {
 
         private void waitForShutdown() {
             try {
-                // Give max 10 seconds for the server to stop before to delete jbossHome.
+                // Wait for the server to stop before deleting jbossHome. Continue to wait until timeout.
                 ModelNode mn = new ModelNode();
                 mn.get(ADDRESS);
                 mn.get(OP).set(READ_ATTRIBUTE_OPERATION);
                 mn.get(NAME).set(SERVER_STATE);
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < environment.getTimeout(); i++) {
                     try {
                         ModelControllerClient client = server.getModelControllerClient();
                         if (client != null) {
